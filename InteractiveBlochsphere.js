@@ -17,6 +17,7 @@ camera.position.z = 50;
 
 let controls= new OrbitControls(camera, renderer.domElement);
 
+// Sphere outline
 const geometryZAxis = new THREE.CircleGeometry( 15, 32 ); 
 const lineZAxis = new THREE.LineSegments(new THREE.EdgesGeometry(geometryZAxis), new THREE.LineBasicMaterial({color: 0x00000}))
 
@@ -28,24 +29,50 @@ const geometryYAxis = new THREE.CircleGeometry( 15, 32 );
 geometryYAxis.rotateY(1.571)
 const line1YAxis = new THREE.LineSegments(new THREE.EdgesGeometry(geometryYAxis), new THREE.LineBasicMaterial({color: 0x00000}))
 
-
-const dir = new THREE.Vector3( 1, 2, 0 );
-
-//normalize the direction vector (convert to vector of length 1)
-dir.normalize();
-
+// x, y and z axis arrows
 const origin = new THREE.Vector3( 0, 0, 0 );
-const length = 20;
-const hex = 0xff00ff;
+const length = 18;
+const hex = 0x000000;
+const headLength = 1.;
+const headWidth = .75;
 
-const arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
+const dirY = new THREE.Vector3( 0, 0, 0 );
+dirY.normalize();
+const arrowY = new THREE.ArrowHelper( dirY, origin, length, hex, headLength, headWidth );
+
+const dirYNeg = new THREE.Vector3( 0, -1, 0 );
+dirYNeg.normalize();
+const arrowYNeg = new THREE.ArrowHelper( dirYNeg, origin, length, hex, headLength, headWidth );
+
+const dirX = new THREE.Vector3( 1, 0, 0 );
+dirX.normalize();
+const arrowX = new THREE.ArrowHelper( dirX, origin, length, hex, headLength, headWidth );
+
+const dirXNeg = new THREE.Vector3( -1, 0, 0 );
+dirXNeg.normalize();
+const arrowXNeg = new THREE.ArrowHelper( dirXNeg, origin, length, hex, headLength, headWidth );
+
+const dirZ = new THREE.Vector3( 0, 0, 1 );
+dirZ.normalize();
+const arrowZ = new THREE.ArrowHelper( dirZ, origin, length, hex, headLength, headWidth );
+
+const dirZNeg = new THREE.Vector3( 0, 0, -1 );
+dirZNeg.normalize();
+const arrowZNeg = new THREE.ArrowHelper( dirZNeg, origin, length, hex, headLength, headWidth );
 
 // scene population
 scene.background = new THREE.Color(0xaaaaaa);
 scene.add( lineZAxis );
 scene.add( line1XAxis );
 scene.add( line1YAxis );
-scene.add( arrowHelper );
+
+scene.add( arrowX );
+scene.add( arrowY );
+scene.add( arrowZ );
+scene.add( arrowXNeg );
+scene.add( arrowYNeg );
+scene.add( arrowZNeg );
+
 
 function addLight(...pos) {
     const color = 0xFFFFFF;
