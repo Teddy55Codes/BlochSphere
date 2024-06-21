@@ -1,9 +1,19 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import TextSprite from '@seregpie/three.text-sprite';
 
 // helper methods
 function hsl(h, s, l) {
     return (new THREE.Color()).setHSL(h, s, l);
+}
+
+function addTextAsChild(parent, textSprite, vector3D) {
+    const group = new THREE.Group();
+    group.position.x = vector3D.x;
+    group.position.y = vector3D.y; //(new Vector3(10, 1, 1))
+    group.position.z = vector3D.z;
+    group.add(textSprite)
+    parent.add(group)
 }
 
 const renderer = new THREE.WebGLRenderer();
@@ -23,11 +33,11 @@ const lineZAxis = new THREE.LineSegments(new THREE.EdgesGeometry(geometryZAxis),
 
 const geometryXAxis = new THREE.CircleGeometry( 15, 32 );
 geometryXAxis.rotateX(1.571)
-const line1XAxis = new THREE.LineSegments(new THREE.EdgesGeometry(geometryXAxis), new THREE.LineBasicMaterial({color: 0x00000}))
+const lineXAxis = new THREE.LineSegments(new THREE.EdgesGeometry(geometryXAxis), new THREE.LineBasicMaterial({color: 0x00000}))
 
 const geometryYAxis = new THREE.CircleGeometry( 15, 32 );
 geometryYAxis.rotateY(1.571)
-const line1YAxis = new THREE.LineSegments(new THREE.EdgesGeometry(geometryYAxis), new THREE.LineBasicMaterial({color: 0x00000}))
+const lineYAxis = new THREE.LineSegments(new THREE.EdgesGeometry(geometryYAxis), new THREE.LineBasicMaterial({color: 0x00000}))
 
 // x, y and z axis arrows
 const origin = new THREE.Vector3( 0, 0, 0 );
@@ -60,11 +70,41 @@ const dirZNeg = new THREE.Vector3( 0, 0, -1 );
 dirZNeg.normalize();
 const arrowZNeg = new THREE.ArrowHelper( dirZNeg, origin, length, hex, headLength, headWidth );
 
+// rendering text
+const color = "black";
+const fontFamily = '"Times New Roman", Times, serif';
+const fontStyle = "italic"
+const fontSize = 2
+
+addTextAsChild(arrowX.cone, new TextSprite({
+    color: color,
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+    fontStyle: fontStyle,
+    text: "y",
+}), new THREE.Vector3(-2.4, -1.2, 0));
+
+addTextAsChild(arrowY.cone, new TextSprite({
+    color: color,
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+    fontStyle: fontStyle,
+    text: "z",
+}), new THREE.Vector3(0, 1.8, 0));
+
+addTextAsChild(arrowZ.cone, new TextSprite({
+    color: color,
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+    fontStyle: fontStyle,
+    text: "x",
+}), new THREE.Vector3(0, -1.2, -2.4));
+
 // scene population
 scene.background = new THREE.Color(0xaaaaaa);
 scene.add( lineZAxis );
-scene.add( line1XAxis );
-scene.add( line1YAxis );
+scene.add( lineXAxis );
+scene.add( lineYAxis );
 
 scene.add( arrowX );
 scene.add( arrowY );
