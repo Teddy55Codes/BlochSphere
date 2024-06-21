@@ -7,11 +7,15 @@ function hsl(h, s, l) {
     return (new THREE.Color()).setHSL(h, s, l);
 }
 
+function setPosition(element, vector3D) {
+    element.position.x = vector3D.x;
+    element.position.y = vector3D.y; //(new Vector3(10, 1, 1))
+    element.position.z = vector3D.z;
+}
+
 function addTextAsChild(parent, textSprite, vector3D) {
     const group = new THREE.Group();
-    group.position.x = vector3D.x;
-    group.position.y = vector3D.y; //(new Vector3(10, 1, 1))
-    group.position.z = vector3D.z;
+    setPosition(group, vector3D)
     group.add(textSprite)
     parent.add(group)
 }
@@ -28,14 +32,18 @@ camera.position.z = 50;
 let controls= new OrbitControls(camera, renderer.domElement);
 
 // Sphere outline
-const geometryZAxis = new THREE.CircleGeometry( 15, 32 ); 
+const sphereRadius = 15;
+const sphereSegments = 32;
+
+
+const geometryZAxis = new THREE.CircleGeometry( sphereRadius, sphereSegments ); 
 const lineZAxis = new THREE.LineSegments(new THREE.EdgesGeometry(geometryZAxis), new THREE.LineBasicMaterial({color: 0x00000}))
 
-const geometryXAxis = new THREE.CircleGeometry( 15, 32 );
+const geometryXAxis = new THREE.CircleGeometry( sphereRadius, sphereSegments );
 geometryXAxis.rotateX(1.571)
 const lineXAxis = new THREE.LineSegments(new THREE.EdgesGeometry(geometryXAxis), new THREE.LineBasicMaterial({color: 0x00000}))
 
-const geometryYAxis = new THREE.CircleGeometry( 15, 32 );
+const geometryYAxis = new THREE.CircleGeometry( sphereRadius, sphereSegments );
 geometryYAxis.rotateY(1.571)
 const lineYAxis = new THREE.LineSegments(new THREE.EdgesGeometry(geometryYAxis), new THREE.LineBasicMaterial({color: 0x00000}))
 
@@ -70,14 +78,43 @@ const dirZNeg = new THREE.Vector3( 0, 0, -1 );
 dirZNeg.normalize();
 const arrowZNeg = new THREE.ArrowHelper( dirZNeg, origin, length, hex, headLength, headWidth );
 
+// intersection dots
+const dotRadius = .2;
+const dotWidthSegments = 10;
+const dotHeightSegments = 10;
+const dotColor = 0x0000ff;
+
+const geometry = new THREE.SphereGeometry( dotRadius, dotWidthSegments, dotHeightSegments );
+const material = new THREE.MeshBasicMaterial( { color: dotColor } );
+
+const dotZero = new THREE.Mesh( geometry, material );
+setPosition(dotZero, new THREE.Vector3( 0, sphereRadius, 0 ))
+
+const dotOne = new THREE.Mesh( geometry, material );
+setPosition(dotOne, new THREE.Vector3( 0, -sphereRadius, 0 ))
+
+const dotPos = new THREE.Mesh( geometry, material );
+setPosition(dotPos, new THREE.Vector3( 0, 0, sphereRadius ))
+
+const dotNeg = new THREE.Mesh( geometry, material );
+setPosition(dotNeg, new THREE.Vector3( 0, 0, -sphereRadius ))
+
+const dotIPos = new THREE.Mesh( geometry, material );
+setPosition(dotIPos, new THREE.Vector3( sphereRadius, 0, 0 ))
+
+const dotINeg = new THREE.Mesh( geometry, material );
+setPosition(dotINeg, new THREE.Vector3( -sphereRadius, 0, 0 ))
+
 // rendering text
-const color = "black";
+const arrowTextColor = "black";
+const dotTextColor = "blue"
 const fontFamily = '"Times New Roman", Times, serif';
 const fontStyle = "italic"
 const fontSize = 2
 
+// arrow text
 addTextAsChild(arrowX.cone, new TextSprite({
-    color: color,
+    color: arrowTextColor,
     fontFamily: fontFamily,
     fontSize: fontSize,
     fontStyle: fontStyle,
@@ -85,7 +122,7 @@ addTextAsChild(arrowX.cone, new TextSprite({
 }), new THREE.Vector3(-2.4, -1.2, 0));
 
 addTextAsChild(arrowY.cone, new TextSprite({
-    color: color,
+    color: arrowTextColor,
     fontFamily: fontFamily,
     fontSize: fontSize,
     fontStyle: fontStyle,
@@ -93,12 +130,62 @@ addTextAsChild(arrowY.cone, new TextSprite({
 }), new THREE.Vector3(0, 1.8, 0));
 
 addTextAsChild(arrowZ.cone, new TextSprite({
-    color: color,
+    color: arrowTextColor,
     fontFamily: fontFamily,
     fontSize: fontSize,
     fontStyle: fontStyle,
     text: "x",
 }), new THREE.Vector3(0, -1.2, -2.4));
+
+
+// dot text
+addTextAsChild(dotIPos, new TextSprite({
+    color: dotTextColor,
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+    fontStyle: fontStyle,
+    text: "|+i⟩",
+}), new THREE.Vector3(-2.4, 1.8, 0));
+
+addTextAsChild(dotINeg, new TextSprite({
+    color: dotTextColor,
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+    fontStyle: fontStyle,
+    text: "|-i⟩",
+}), new THREE.Vector3(2.4, 1.8, 0));
+
+addTextAsChild(dotPos, new TextSprite({
+    color: dotTextColor,
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+    fontStyle: fontStyle,
+    text: "|+⟩",
+}), new THREE.Vector3(0, 1.8, -2.4));
+
+addTextAsChild(dotNeg, new TextSprite({
+    color: dotTextColor,
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+    fontStyle: fontStyle,
+    text: "|-⟩",
+}), new THREE.Vector3(0, 1.8, 2.4));
+
+addTextAsChild(dotOne, new TextSprite({
+    color: dotTextColor,
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+    fontStyle: fontStyle,
+    text: "|1⟩",
+}), new THREE.Vector3(0, 2.4, 0));
+
+addTextAsChild(dotZero, new TextSprite({
+    color: dotTextColor,
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+    fontStyle: fontStyle,
+    text: "|0⟩",
+}), new THREE.Vector3(0, -1.2, 0));
 
 // scene population
 scene.background = new THREE.Color(0xaaaaaa);
@@ -112,6 +199,13 @@ scene.add( arrowZ );
 scene.add( arrowXNeg );
 scene.add( arrowYNeg );
 scene.add( arrowZNeg );
+
+scene.add( dotZero );
+scene.add( dotOne );
+scene.add( dotNeg );
+scene.add( dotPos );
+scene.add( dotIPos )
+scene.add( dotINeg )
 
 
 function addLight(...pos) {
