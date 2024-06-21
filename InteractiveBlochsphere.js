@@ -9,15 +9,15 @@ function hsl(h, s, l) {
 
 function setPosition(element, vector3D) {
     element.position.x = vector3D.x;
-    element.position.y = vector3D.y; //(new Vector3(10, 1, 1))
+    element.position.y = vector3D.y;
     element.position.z = vector3D.z;
 }
 
 function addTextAsChild(parent, textSprite, vector3D) {
     const group = new THREE.Group();
-    setPosition(group, vector3D)
-    group.add(textSprite)
-    parent.add(group)
+    setPosition(group, vector3D);
+    group.add(textSprite);
+    parent.add(group);
 }
 
 const renderer = new THREE.WebGLRenderer();
@@ -105,9 +105,18 @@ setPosition(dotIPos, new THREE.Vector3( sphereRadius, 0, 0 ))
 const dotINeg = new THREE.Mesh( geometry, material );
 setPosition(dotINeg, new THREE.Vector3( -sphereRadius, 0, 0 ))
 
+// qubit position arrow
+const qubitArrowLength = 16;
+const qubitArrowColor = 0xff00000;
+
+const qubitPosition = new THREE.Vector3( 1, .5, 1 );
+qubitPosition.normalize();
+const qubitArrow = new THREE.ArrowHelper( qubitPosition, origin, qubitArrowLength, qubitArrowColor, headLength, headWidth );
+
 // rendering text
 const arrowTextColor = "black";
 const dotTextColor = "blue"
+const qubitTextColor = "red";
 const fontFamily = '"Times New Roman", Times, serif';
 const fontStyle = "italic"
 const fontSize = 2
@@ -187,8 +196,17 @@ addTextAsChild(dotZero, new TextSprite({
     text: "|0⟩",
 }), new THREE.Vector3(0, -1.2, 0));
 
+// qubit arrrow text
+addTextAsChild(qubitArrow.cone, new TextSprite({
+    color: qubitTextColor,
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+    fontStyle: fontStyle,
+    text: "|Ψ⟩",
+}), new THREE.Vector3(0, 1.8, 0));
+
 // scene population
-scene.background = new THREE.Color(0xaaaaaa);
+scene.background = new THREE.Color(0xffffff);
 scene.add( lineZAxis );
 scene.add( lineXAxis );
 scene.add( lineYAxis );
@@ -204,8 +222,10 @@ scene.add( dotZero );
 scene.add( dotOne );
 scene.add( dotNeg );
 scene.add( dotPos );
-scene.add( dotIPos )
-scene.add( dotINeg )
+scene.add( dotIPos );
+scene.add( dotINeg );
+
+scene.add( qubitArrow );
 
 
 function addLight(...pos) {
