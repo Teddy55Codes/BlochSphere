@@ -11,19 +11,12 @@ export class Qubit {
         const complexAlpha = this.value[0].clone();
         this.value[0] = gate[0][0].multiply(this.value[0]).addition(gate[0][1].multiply(this.value[1]));
         this.value[1] = gate[1][0].multiply(complexAlpha).addition(gate[1][1].multiply(this.value[1]));
-        
-        this.normalize();
-    }
-    
-    normalize() {
-        const mag = Math.sqrt(this.value[0].magnitude() * this.value[0].magnitude() + this.value[1].magnitude() * this.value[1].magnitude());
-        this.value[0] = this.value[0].divideByReal(mag)
-        this.value[1] = this.value[1].divideByReal(mag)
     }
 
     polarCoordinates() {
-        const alpha = this.value[0];
-        const beta = this.value[1];
+        const mag = Math.sqrt(this.value[0].magnitude() * this.value[0].magnitude() + this.value[1].magnitude() * this.value[1].magnitude());
+        const alpha = this.value[0].divideByReal(mag)
+        const beta = this.value[1].divideByReal(mag)
         
         const theta = 2 * Math.acos(alpha.magnitude());
         
