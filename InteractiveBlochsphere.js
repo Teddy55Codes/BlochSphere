@@ -3,10 +3,10 @@ import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import TextSprite from '@seregpie/three.text-sprite';
 import GUI from 'lil-gui';
 import {MathUtils} from "three";
-import {Qubit} from "./Qubit";
+import * as Qubit from "./Qubit";
 import * as Gates from "./Gates"
 
-let qubit = new Qubit();
+let qubit = new Qubit.Qubit();
 
 function setPosition(element, vector3D) {
     element.position.x = vector3D.x;
@@ -29,6 +29,11 @@ function setArrowWithSphericalPolarCoordinates(polar, azimuthal) {
 function refreshArrowPosition() {
     const { theta: polar, phi: azimuthal } = qubit.polarCoordinates()
     setArrowWithSphericalPolarCoordinates(polar, azimuthal)
+}
+
+function setState(state) {
+    qubit = new Qubit.Qubit(state[0], state[1]);
+    refreshArrowPosition();
 }
 
 function applyGate(gate) {
@@ -264,6 +269,12 @@ window.addEventListener('resize', () => {
 });
 
 const actions = {
+    State0: () => setState(Qubit.baseState0),
+    State1: () => setState(Qubit.baseState1),
+    StateM: () => setState(Qubit.baseStateM),
+    StateP: () => setState(Qubit.baseStateP),
+    StateMi: () => setState(Qubit.baseStateMi),
+    StatePi: () => setState(Qubit.baseStatePi),
     XGate: () => applyGate(Gates.XGate),
     YGate: () => applyGate(Gates.YGate),
     ZGate: () => applyGate(Gates.ZGate),
@@ -283,6 +294,13 @@ const actions = {
 }
 
 const gui = new GUI();
+const setStateFolder = gui.addFolder("Set Qubit State");
+setStateFolder.add(actions, "State0").name("|0⟩");
+setStateFolder.add(actions, "State1").name("|1⟩");
+setStateFolder.add(actions, "StateM").name("|-⟩");
+setStateFolder.add(actions, "StateP").name("|+⟩");
+setStateFolder.add(actions, "StateMi").name("|-i⟩");
+setStateFolder.add(actions, "StatePi").name("|+i⟩");
 
 const halfTurnsFolder = gui.addFolder("Half Turns");
 halfTurnsFolder.add(actions, "XGate").name("X Gate");
