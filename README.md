@@ -29,3 +29,8 @@ These gates can be applied in any order for example `H, T, Y^-¼` will result in
 
 ![example qubit state](readme-resources/example-qubit-state.png)
 
+## How To Run
+1. Have npm installed
+2. run `npm install`
+3. run `vite serve`
+
