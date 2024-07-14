@@ -31,6 +31,11 @@ function refreshArrowPosition() {
     setArrowWithSphericalPolarCoordinates(polar, azimuthal)
 }
 
+function applyGate(gate) {
+    qubit.applyGate(gate)
+    refreshArrowPosition();
+}
+
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -267,31 +272,51 @@ function SetQubitPosition(vector3D) {
 }
 
 const actions = {
-    XGate: function () {
-        qubit.applyGate(Gates.XGate)
-        refreshArrowPosition();
-    },
-    YGate: function () {
-        qubit.applyGate(Gates.YGate)
-        refreshArrowPosition();
-    },
-    ZGate: function () {
-        qubit.applyGate(Gates.ZGate)
-        refreshArrowPosition();
-    },
-    HGate: function () {
-        qubit.applyGate(Gates.HGate)
-        refreshArrowPosition();
-    }
+    XGate: () => applyGate(Gates.XGate),
+    YGate: () => applyGate(Gates.YGate),
+    ZGate: () => applyGate(Gates.ZGate),
+    HGate: () => applyGate(Gates.HGate),
+    SGate: () => applyGate(Gates.SGate),
+    SNegGate: () => applyGate(Gates.SNegGate),
+    YHalfGate: () => applyGate(Gates.YHalfGate),
+    YNegHalfGate: () => applyGate(Gates.YNegHalfGate),
+    XHalfGate: () => applyGate(Gates.XHalfGate),
+    XNegHalfGate: () => applyGate(Gates.XNegHalfGate),
+    TGate: () => applyGate(Gates.TGate),
+    TNegGate: () => applyGate(Gates.TNegGate),
+    YQuarterGate: () => applyGate(Gates.YQuarterGate),
+    YNegQuarterGate: () => applyGate(Gates.YNegQuarterGate),
+    XQuarterGate: () => applyGate(Gates.XQuarterGate),
+    XNegQuarterGate: () => applyGate(Gates.XNegQuarterGate),
 }
 
 const gui = new GUI();
-const halfTurnsFolder = gui.addFolder("Half Turns")
-halfTurnsFolder.add(actions, 'XGate').name('Apply X Gate');
-halfTurnsFolder.add(actions, 'YGate').name('Apply Y Gate');
-halfTurnsFolder.add(actions, 'ZGate').name('Apply Z Gate');
-halfTurnsFolder.add(actions, 'HGate').name('Apply H Gate');
+
+const halfTurnsFolder = gui.addFolder("Half Turns");
+halfTurnsFolder.add(actions, "XGate").name("X Gate");
+halfTurnsFolder.add(actions, "YGate").name("Y Gate");
+halfTurnsFolder.add(actions, "ZGate").name("Z Gate");
+halfTurnsFolder.add(actions, "HGate").name("H Gate");
+
+const quarterTurnsFolder = gui.addFolder("Quarter Turns");
+quarterTurnsFolder.add(actions, "SGate").name("S Gate");
+quarterTurnsFolder.add(actions, "SNegGate").name("S^-1 Gate");
+quarterTurnsFolder.add(actions, "YHalfGate").name("Y^½ Gate");
+quarterTurnsFolder.add(actions, "YNegHalfGate").name("Y^-½ Gate");
+quarterTurnsFolder.add(actions, "XHalfGate").name("X^½ Gate");
+quarterTurnsFolder.add(actions, "XNegHalfGate").name("X^-½ Gate");
+
+const eighthTurnsFolder = gui.addFolder("Eighth Turns");
+eighthTurnsFolder.add(actions, "TGate").name("T Gate");
+eighthTurnsFolder.add(actions, "TNegGate").name("T^-1 Gate");
+eighthTurnsFolder.add(actions, "YQuarterGate").name("Y^¼ Gate");
+eighthTurnsFolder.add(actions, "YNegQuarterGate").name("Y^-¼ Gate");
+eighthTurnsFolder.add(actions, "XQuarterGate").name("X^¼ Gate");
+eighthTurnsFolder.add(actions, "XNegQuarterGate").name("X^-¼ Gate");
+
 halfTurnsFolder.open();
+quarterTurnsFolder.open();
+eighthTurnsFolder.open();
 
 function animate() {
     requestAnimationFrame(animate);
