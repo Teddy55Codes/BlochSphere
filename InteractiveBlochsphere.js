@@ -139,7 +139,7 @@ const qubitAnchor = new THREE.Group();
 const arrowTextColor = "black";
 const dotTextColor = "blue"
 const qubitTextColor = "red";
-const fontFamily = '"Times New Roman", Times, serif';
+const fontFamily = 'Times, serif, "Times New Roman"';
 const fontStyle = "italic"
 const fontSize = 2
 
