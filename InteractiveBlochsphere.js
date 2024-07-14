@@ -302,27 +302,27 @@ setStateFolder.add(actions, "StateP").name("|+⟩");
 setStateFolder.add(actions, "StateMi").name("|-i⟩");
 setStateFolder.add(actions, "StatePi").name("|+i⟩");
 
-const halfTurnsFolder = gui.addFolder("Half Turns");
-halfTurnsFolder.add(actions, "XGate").name("X Gate");
-halfTurnsFolder.add(actions, "YGate").name("Y Gate");
-halfTurnsFolder.add(actions, "ZGate").name("Z Gate");
-halfTurnsFolder.add(actions, "HGate").name("H Gate");
+const halfTurnsFolder = gui.addFolder("Half Turn Gates");
+halfTurnsFolder.add(actions, "XGate").name("X");
+halfTurnsFolder.add(actions, "YGate").name("Y");
+halfTurnsFolder.add(actions, "ZGate").name("Z");
+halfTurnsFolder.add(actions, "HGate").name("H");
 
-const quarterTurnsFolder = gui.addFolder("Quarter Turns");
-quarterTurnsFolder.add(actions, "SGate").name("S Gate");
-quarterTurnsFolder.add(actions, "SNegGate").name("S^-1 Gate");
-quarterTurnsFolder.add(actions, "YHalfGate").name("Y^½ Gate");
-quarterTurnsFolder.add(actions, "YNegHalfGate").name("Y^-½ Gate");
-quarterTurnsFolder.add(actions, "XHalfGate").name("X^½ Gate");
-quarterTurnsFolder.add(actions, "XNegHalfGate").name("X^-½ Gate");
+const quarterTurnsFolder = gui.addFolder("Quarter Turn Gates");
+quarterTurnsFolder.add(actions, "SGate").name("S");
+quarterTurnsFolder.add(actions, "SNegGate").name("S^-1");
+quarterTurnsFolder.add(actions, "YHalfGate").name("Y^½");
+quarterTurnsFolder.add(actions, "YNegHalfGate").name("Y^-½");
+quarterTurnsFolder.add(actions, "XHalfGate").name("X^½");
+quarterTurnsFolder.add(actions, "XNegHalfGate").name("X^-½");
 
-const eighthTurnsFolder = gui.addFolder("Eighth Turns");
-eighthTurnsFolder.add(actions, "TGate").name("T Gate");
-eighthTurnsFolder.add(actions, "TNegGate").name("T^-1 Gate");
-eighthTurnsFolder.add(actions, "YQuarterGate").name("Y^¼ Gate");
-eighthTurnsFolder.add(actions, "YNegQuarterGate").name("Y^-¼ Gate");
-eighthTurnsFolder.add(actions, "XQuarterGate").name("X^¼ Gate");
-eighthTurnsFolder.add(actions, "XNegQuarterGate").name("X^-¼ Gate");
+const eighthTurnsFolder = gui.addFolder("Eighth Turn Gates");
+eighthTurnsFolder.add(actions, "TGate").name("T");
+eighthTurnsFolder.add(actions, "TNegGate").name("T^-1");
+eighthTurnsFolder.add(actions, "YQuarterGate").name("Y^¼");
+eighthTurnsFolder.add(actions, "YNegQuarterGate").name("Y^-¼");
+eighthTurnsFolder.add(actions, "XQuarterGate").name("X^¼");
+eighthTurnsFolder.add(actions, "XNegQuarterGate").name("X^-¼");
 
 halfTurnsFolder.open();
 quarterTurnsFolder.open();
