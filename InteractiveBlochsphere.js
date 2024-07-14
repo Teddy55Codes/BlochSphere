@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import TextSprite from '@seregpie/three.text-sprite';
-import {GUI} from 'three/addons/libs/lil-gui.module.min.js';
+import GUI from 'lil-gui';
 import {MathUtils} from "three";
 import {Qubit} from "./Qubit";
 import * as Gates from "./Gates"
@@ -286,13 +286,12 @@ const actions = {
 }
 
 const gui = new GUI();
-
-gui.add(actions, 'XGate').name('Apply X Gate');
-gui.add(actions, 'YGate').name('Apply Y Gate');
-gui.add(actions, 'ZGate').name('Apply Z Gate');
-gui.add(actions, 'HGate').name('Apply H Gate');
-
-gui.open();
+const halfTurnsFolder = gui.addFolder("Half Turns")
+halfTurnsFolder.add(actions, 'XGate').name('Apply X Gate');
+halfTurnsFolder.add(actions, 'YGate').name('Apply Y Gate');
+halfTurnsFolder.add(actions, 'ZGate').name('Apply Z Gate');
+halfTurnsFolder.add(actions, 'HGate').name('Apply H Gate');
+halfTurnsFolder.open();
 
 function animate() {
     requestAnimationFrame(animate);
