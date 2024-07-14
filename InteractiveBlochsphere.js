@@ -263,14 +263,6 @@ window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-function GetQubitPosition() {
-    return new THREE.Vector3(qubitArrow.position.z, qubitArrow.position.x, qubitArrow.position.y)
-}
-
-function SetQubitPosition(vector3D) {
-    qubitArrow.setDirection(new THREE.Vector3(vector3D.y, vector3D.z, vector3D.x))
-}
-
 const actions = {
     XGate: () => applyGate(Gates.XGate),
     YGate: () => applyGate(Gates.YGate),
