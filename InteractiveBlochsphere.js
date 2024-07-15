@@ -2,7 +2,6 @@ import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import TextSprite from '@seregpie/three.text-sprite';
 import GUI from 'lil-gui';
-import {MathUtils} from "three";
 import * as Qubit from "./Qubit";
 import * as Gates from "./Gates"
 
@@ -62,11 +61,11 @@ const geometryZAxis = new THREE.CircleGeometry(sphereRadius, sphereSegments);
 const lineZAxis = new THREE.LineSegments(new THREE.EdgesGeometry(geometryZAxis), new THREE.LineBasicMaterial({color: 0x00000}))
 
 const geometryXAxis = new THREE.CircleGeometry(sphereRadius, sphereSegments);
-geometryXAxis.rotateX(MathUtils.degToRad(90))
+geometryXAxis.rotateX(Math.PI/2)
 const lineXAxis = new THREE.LineSegments(new THREE.EdgesGeometry(geometryXAxis), new THREE.LineBasicMaterial({color: 0x00000}))
 
 const geometryYAxis = new THREE.CircleGeometry(sphereRadius, sphereSegments);
-geometryYAxis.rotateY(MathUtils.degToRad(90))
+geometryYAxis.rotateY(Math.PI/2)
 const lineYAxis = new THREE.LineSegments(new THREE.EdgesGeometry(geometryYAxis), new THREE.LineBasicMaterial({color: 0x00000}))
 
 // x, y and z axis arrows
