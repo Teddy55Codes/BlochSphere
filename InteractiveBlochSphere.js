@@ -250,7 +250,7 @@ export class InteractiveBlochSphere {
             container: controlsContainer,
             width: 150});
 
-        this.BuildGUI(gui);
+        this.buildGUI(gui);
 
         parent.appendChild(contentContainer);
         parent.appendChild(controlsContainer);
@@ -322,14 +322,14 @@ export class InteractiveBlochSphere {
 
     refreshTextInfo(polar, azimuthal, realAlpha, imagAlpha, realBeta, imagBeta) {
         this.infoText.innerText =
-            `θ: ${polar} 
-        φ: ${azimuthal} 
+            `φ: ${Math.round((azimuthal/Math.PI)*180)}°
+        θ: ${Math.round((polar/Math.PI)*180)}°
         
-        Alpha: ${realAlpha.toFixed(2)} + ${imagAlpha.toFixed(2)}i 
-        Beta: ${realBeta.toFixed(2)} + ${imagBeta.toFixed(2)}i`;
+        Alpha: ${realAlpha.toFixed(4)} ${imagAlpha < 0 ? '' : '+'}${imagAlpha.toFixed(4)}i 
+        Beta: ${realBeta.toFixed(4)} ${imagBeta < 0 ? '' : '+'}${imagBeta.toFixed(4)}i`;
     }
 
-    BuildGUI(gui) {
+    buildGUI(gui) {
         const actions = {
             State0: () => this.setState(Qubit.baseState0),
             State1: () => this.setState(Qubit.baseState1),
