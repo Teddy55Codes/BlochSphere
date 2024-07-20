@@ -1,3 +1,3 @@
-import {InteractiveBlochsphere} from "./InteractiveBlochsphere";
+import {InteractiveBlochSphere} from "./InteractiveBlochSphere";
 
-new InteractiveBlochsphere();
+new InteractiveBlochSphere();

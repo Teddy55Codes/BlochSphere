@@ -5,7 +5,7 @@ import GUI from 'lil-gui';
 import * as Qubit from "./Qubit";
 import * as Gates from "./Gates"
 
-export class InteractiveBlochsphere {
+export class InteractiveBlochSphere {
     qubit = new Qubit.Qubit();
     
     constructor() {
