@@ -99,3 +99,12 @@ These gates can be applied in any order for example $H, T, Y^{-\frac 1 4}$ will 
 2. run `npm install`
 3. run `vite serve`
 
+## Use As npm Package
+This project is available as an npm package under the name [interactive-blochsphere](https://www.npmjs.com/package/interactive-blochsphere).
+
+### Example Usage
+```javascript
+import {InteractiveBlochSphere} from "interactive-blochsphere";
+
+new InteractiveBlochSphere(document.getElementById("blochsphere"));
+```
