@@ -26,8 +26,18 @@ function setArrowWithSphericalPolarCoordinates(polar, azimuthal) {
 }
 
 function refreshArrowPosition() {
-    const { theta: polar, phi: azimuthal } = qubit.polarCoordinates()
-    setArrowWithSphericalPolarCoordinates(polar, azimuthal)
+    const { 
+        theta: polar, 
+        phi: azimuthal } = qubit.polarCoordinates();
+    const { 
+        realAlpha: realAlpha, 
+        imagAlpha: imagAlpha, 
+        realBeta: realBeta, 
+        imagBeta: imagBeta } = qubit.qubitValue()
+    
+    setArrowWithSphericalPolarCoordinates(polar, azimuthal);
+    refreshTextInfo(polar, azimuthal, realAlpha, imagAlpha, realBeta, imagBeta);
+
 }
 
 function setState(state) {
@@ -40,8 +50,24 @@ function applyGate(gate) {
     refreshArrowPosition();
 }
 
+function refreshTextInfo(polar, azimuthal, realAlpha, imagAlpha, realBeta, imagBeta) {
+    infoText.innerText = 
+        `θ: ${polar} 
+        φ: ${azimuthal} 
+        
+        Alpha: ${realAlpha} + ${imagAlpha}i 
+        Beta: ${realBeta} + ${imagBeta}i`;
+}
+
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
+
+const infoText = document.createElement('p');
+infoText.style.fontSize = "18pt";
+infoText.style.marginLeft = "5%";
+
+
+document.body.appendChild(infoText)
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
@@ -326,6 +352,9 @@ eighthTurnsFolder.add(actions, "XNegQuarterGate").name("X^-¼");
 halfTurnsFolder.open();
 quarterTurnsFolder.open();
 eighthTurnsFolder.open();
+
+// set initial displayed values
+refreshArrowPosition();
 
 function animate() {
     requestAnimationFrame(animate);

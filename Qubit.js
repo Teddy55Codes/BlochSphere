@@ -37,4 +37,13 @@ export class Qubit {
         }
         return { theta, phi };
     }
+    
+    qubitValue() {
+        const realAlpha = this.value[0].real;
+        const imagAlpha = this.value[0].imaginary;
+        const realBeta = this.value[1].real;
+        const imagBeta = this.value[1].imaginary;
+        
+        return { realAlpha, imagAlpha, realBeta, imagBeta }
+    }
 }
