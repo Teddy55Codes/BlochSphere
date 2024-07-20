@@ -7,6 +7,9 @@ import * as Gates from "./Gates"
 
 export class InteractiveBlochSphere {
     qubit = new Qubit.Qubit();
+    infoText;
+    qubitAnchor;
+    qubitArrow;
     
     constructor() {
         const renderer = new THREE.WebGLRenderer();
@@ -90,8 +93,8 @@ export class InteractiveBlochSphere {
         const qubitArrowColor = 0xff00000;
 
         let qubitPosition = new THREE.Vector3(0, 1, 0);
-        const qubitArrow = new THREE.ArrowHelper(qubitPosition, origin, qubitArrowLength, qubitArrowColor, headLength, headWidth);
-        const qubitAnchor = new THREE.Group();
+        this.qubitArrow = new THREE.ArrowHelper(qubitPosition, origin, qubitArrowLength, qubitArrowColor, headLength, headWidth);
+        this.qubitAnchor = new THREE.Group();
 
         // rendering text
         const arrowTextColor = "black";
@@ -177,7 +180,7 @@ export class InteractiveBlochSphere {
         }), new THREE.Vector3(1.8, -1.2, 0));
 
         // qubit arrrow text
-        this.addTextAsChild(qubitArrow.cone, new TextSprite({
+        this.addTextAsChild(this.qubitArrow.cone, new TextSprite({
             color: qubitTextColor,
             fontFamily: fontFamily,
             fontSize: fontSize,
@@ -205,8 +208,8 @@ export class InteractiveBlochSphere {
         scene.add(dotIPos);
         scene.add(dotINeg);
 
-        qubitAnchor.add(qubitArrow)
-        scene.add(qubitAnchor);
+        this.qubitAnchor.add(this.qubitArrow)
+        scene.add(this.qubitAnchor);
 
         function addLight(...pos) {
             const color = 0xFFFFFF;
@@ -221,7 +224,7 @@ export class InteractiveBlochSphere {
 
         // Handle window resize
         window.addEventListener('resize', () => {
-            const height = contentContainer.clientHeight - this.getAbsoluteHeight(infoText);
+            const height = contentContainer.clientHeight - this.getAbsoluteHeight(this.infoText);
 
             camera.aspect = contentContainer.clientWidth / height;
             camera.updateProjectionMatrix();
@@ -239,8 +242,8 @@ export class InteractiveBlochSphere {
         contentContainer.style.width = "100%";
 
         // Info text that shows the current value of the qubit
-        const infoText = document.createElement("p");
-        infoText.style.marginLeft = "10px";
+        this.infoText = document.createElement("p");
+        this.infoText.style.marginLeft = "10px";
 
         // lil-gui
         const gui = new GUI({
@@ -251,19 +254,19 @@ export class InteractiveBlochSphere {
 
         parent.appendChild(contentContainer);
         parent.appendChild(controlsContainer);
-        contentContainer.appendChild(infoText);
+        contentContainer.appendChild(this.infoText);
         contentContainer.appendChild(renderer.domElement);
-        renderer.setSize(contentContainer.clientWidth, contentContainer.clientHeight - this.getAbsoluteHeight(infoText));
+        renderer.setSize(contentContainer.clientWidth, contentContainer.clientHeight - this.getAbsoluteHeight(this.infoText));
 
         // camera controls
-        const camera = new THREE.PerspectiveCamera(75, contentContainer.clientWidth / (contentContainer.clientHeight - this.getAbsoluteHeight(infoText)), 1, 1000);
+        const camera = new THREE.PerspectiveCamera(75, contentContainer.clientWidth / (contentContainer.clientHeight - this.getAbsoluteHeight(this.infoText)), 1, 1000);
         camera.position.z = 30;
         camera.position.x = 22;
         camera.position.y = 15;
         const controls = new OrbitControls(camera, renderer.domElement);
 
         // set initial displayed values
-        this.refreshArrowPosition(infoText, qubitAnchor, qubitArrow);
+        this.refreshArrowPosition();
         
         function animate() {
             requestAnimationFrame(animate);
@@ -287,12 +290,12 @@ export class InteractiveBlochSphere {
         parent.add(group);
     }
 
-    setArrowWithSphericalPolarCoordinates(polar, azimuthal, qubitAnchor, qubitArrow) {
-        qubitAnchor.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), azimuthal);
-        qubitArrow.setRotationFromAxisAngle(new THREE.Vector3(1, 0, 0), polar);
+    setArrowWithSphericalPolarCoordinates(polar, azimuthal) {
+        this.qubitAnchor.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), azimuthal);
+        this.qubitArrow.setRotationFromAxisAngle(new THREE.Vector3(1, 0, 0), polar);
     }
 
-    refreshArrowPosition(infoText, qubitAnchor, qubitArrow) {
+    refreshArrowPosition() {
         const {
             theta: polar,
             phi: azimuthal } = this.qubit.polarCoordinates();
@@ -302,8 +305,8 @@ export class InteractiveBlochSphere {
             realBeta: realBeta,
             imagBeta: imagBeta } = this.qubit.qubitValue()
 
-        this.setArrowWithSphericalPolarCoordinates(polar, azimuthal, qubitAnchor, qubitArrow);
-        this.refreshTextInfo(infoText, polar, azimuthal, realAlpha, imagAlpha, realBeta, imagBeta);
+        this.setArrowWithSphericalPolarCoordinates(polar, azimuthal);
+        this.refreshTextInfo(polar, azimuthal, realAlpha, imagAlpha, realBeta, imagBeta);
 
     }
 
@@ -317,13 +320,13 @@ export class InteractiveBlochSphere {
         this.refreshArrowPosition();
     }
 
-    refreshTextInfo(infoText, polar, azimuthal, realAlpha, imagAlpha, realBeta, imagBeta) {
-        infoText.innerText =
+    refreshTextInfo(polar, azimuthal, realAlpha, imagAlpha, realBeta, imagBeta) {
+        this.infoText.innerText =
             `θ: ${polar} 
         φ: ${azimuthal} 
         
-        Alpha: ${realAlpha} + ${imagAlpha}i 
-        Beta: ${realBeta} + ${imagBeta}i`;
+        Alpha: ${realAlpha.toFixed(2)} + ${imagAlpha.toFixed(2)}i 
+        Beta: ${realBeta.toFixed(2)} + ${imagBeta.toFixed(2)}i`;
     }
 
     BuildGUI(gui) {
