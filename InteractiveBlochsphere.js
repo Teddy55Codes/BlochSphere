@@ -60,24 +60,7 @@ function refreshTextInfo(polar, azimuthal, realAlpha, imagAlpha, realBeta, imagB
 }
 
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-
-const infoText = document.createElement('p');
-infoText.style.fontSize = "18pt";
-infoText.style.marginLeft = "5%";
-
-
-document.body.appendChild(infoText)
-document.body.appendChild(renderer.domElement);
-
 const scene = new THREE.Scene();
-
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
-camera.position.z = 40;
-camera.position.x = 22;
-camera.position.y = 15;
-
-const controls = new OrbitControls(camera, renderer.domElement);
 
 // Sphere outline
 const sphereRadius = 15;
@@ -288,70 +271,46 @@ addLight(1, -1, -2);
 
 // Handle window resize
 window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    const height = contentContainer.clientHeight - getAbsoluteHeight(infoText);
+    
+    camera.aspect = contentContainer.clientWidth / height;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(contentContainer.clientWidth, height);
 });
 
-const actions = {
-    State0: () => setState(Qubit.baseState0),
-    State1: () => setState(Qubit.baseState1),
-    StateM: () => setState(Qubit.baseStateM),
-    StateP: () => setState(Qubit.baseStateP),
-    StateMi: () => setState(Qubit.baseStateMi),
-    StatePi: () => setState(Qubit.baseStatePi),
-    XGate: () => applyGate(Gates.XGate),
-    YGate: () => applyGate(Gates.YGate),
-    ZGate: () => applyGate(Gates.ZGate),
-    HGate: () => applyGate(Gates.HGate),
-    SGate: () => applyGate(Gates.SGate),
-    SNegGate: () => applyGate(Gates.SNegGate),
-    YHalfGate: () => applyGate(Gates.YHalfGate),
-    YNegHalfGate: () => applyGate(Gates.YNegHalfGate),
-    XHalfGate: () => applyGate(Gates.XHalfGate),
-    XNegHalfGate: () => applyGate(Gates.XNegHalfGate),
-    TGate: () => applyGate(Gates.TGate),
-    TNegGate: () => applyGate(Gates.TNegGate),
-    YQuarterGate: () => applyGate(Gates.YQuarterGate),
-    YNegQuarterGate: () => applyGate(Gates.YNegQuarterGate),
-    XQuarterGate: () => applyGate(Gates.XQuarterGate),
-    XNegQuarterGate: () => applyGate(Gates.XNegQuarterGate),
-}
+const parent = document.getElementById("blochsphere");
+parent.style.display = "flex";
+parent.style.alignItems = "horizontal"
 
-const gui = new GUI();
-const setStateFolder = gui.addFolder("Set Qubit State");
-setStateFolder.add(actions, "State0").name("|0⟩");
-setStateFolder.add(actions, "State1").name("|1⟩");
-setStateFolder.add(actions, "StateM").name("|-⟩");
-setStateFolder.add(actions, "StateP").name("|+⟩");
-setStateFolder.add(actions, "StateMi").name("|-i⟩");
-setStateFolder.add(actions, "StatePi").name("|+i⟩");
+const controlsContainer = document.createElement("div");
+controlsContainer.style.width = "150px";
 
-const halfTurnsFolder = gui.addFolder("Half Turn Gates");
-halfTurnsFolder.add(actions, "XGate").name("X");
-halfTurnsFolder.add(actions, "YGate").name("Y");
-halfTurnsFolder.add(actions, "ZGate").name("Z");
-halfTurnsFolder.add(actions, "HGate").name("H");
+const contentContainer = document.createElement("div");
+contentContainer.style.width = "100%";
 
-const quarterTurnsFolder = gui.addFolder("Quarter Turn Gates");
-quarterTurnsFolder.add(actions, "SGate").name("S");
-quarterTurnsFolder.add(actions, "SNegGate").name("S^-1");
-quarterTurnsFolder.add(actions, "YHalfGate").name("Y^½");
-quarterTurnsFolder.add(actions, "YNegHalfGate").name("Y^-½");
-quarterTurnsFolder.add(actions, "XHalfGate").name("X^½");
-quarterTurnsFolder.add(actions, "XNegHalfGate").name("X^-½");
+// Info text that shows the current value of the qubit
+const infoText = document.createElement("p");
+infoText.style.marginLeft = "10px";
 
-const eighthTurnsFolder = gui.addFolder("Eighth Turn Gates");
-eighthTurnsFolder.add(actions, "TGate").name("T");
-eighthTurnsFolder.add(actions, "TNegGate").name("T^-1");
-eighthTurnsFolder.add(actions, "YQuarterGate").name("Y^¼");
-eighthTurnsFolder.add(actions, "YNegQuarterGate").name("Y^-¼");
-eighthTurnsFolder.add(actions, "XQuarterGate").name("X^¼");
-eighthTurnsFolder.add(actions, "XNegQuarterGate").name("X^-¼");
+// lil-gui
+const gui = new GUI({
+    container: controlsContainer,
+    width: 150});
 
-halfTurnsFolder.open();
-quarterTurnsFolder.open();
-eighthTurnsFolder.open();
+BuildGUI();
+
+parent.appendChild(contentContainer);
+parent.appendChild(controlsContainer);
+contentContainer.appendChild(infoText);
+contentContainer.appendChild(renderer.domElement);
+renderer.setSize(contentContainer.clientWidth, contentContainer.clientHeight - getAbsoluteHeight(infoText));
+
+// camera controls
+const camera = new THREE.PerspectiveCamera(75, contentContainer.clientWidth / (contentContainer.clientHeight - getAbsoluteHeight(infoText)), 1, 1000);
+camera.position.z = 40;
+camera.position.x = 22;
+camera.position.y = 15;
+const controls = new OrbitControls(camera, renderer.domElement);
 
 // set initial displayed values
 refreshArrowPosition();
@@ -363,3 +322,73 @@ function animate() {
 }
 
 animate();
+
+function BuildGUI() {
+    const actions = {
+        State0: () => setState(Qubit.baseState0),
+        State1: () => setState(Qubit.baseState1),
+        StateM: () => setState(Qubit.baseStateM),
+        StateP: () => setState(Qubit.baseStateP),
+        StateMi: () => setState(Qubit.baseStateMi),
+        StatePi: () => setState(Qubit.baseStatePi),
+        XGate: () => applyGate(Gates.XGate),
+        YGate: () => applyGate(Gates.YGate),
+        ZGate: () => applyGate(Gates.ZGate),
+        HGate: () => applyGate(Gates.HGate),
+        SGate: () => applyGate(Gates.SGate),
+        SNegGate: () => applyGate(Gates.SNegGate),
+        YHalfGate: () => applyGate(Gates.YHalfGate),
+        YNegHalfGate: () => applyGate(Gates.YNegHalfGate),
+        XHalfGate: () => applyGate(Gates.XHalfGate),
+        XNegHalfGate: () => applyGate(Gates.XNegHalfGate),
+        TGate: () => applyGate(Gates.TGate),
+        TNegGate: () => applyGate(Gates.TNegGate),
+        YQuarterGate: () => applyGate(Gates.YQuarterGate),
+        YNegQuarterGate: () => applyGate(Gates.YNegQuarterGate),
+        XQuarterGate: () => applyGate(Gates.XQuarterGate),
+        XNegQuarterGate: () => applyGate(Gates.XNegQuarterGate),
+    }
+
+    const setStateFolder = gui.addFolder("Set Qubit State");
+    setStateFolder.add(actions, "State0").name("|0⟩");
+    setStateFolder.add(actions, "State1").name("|1⟩");
+    setStateFolder.add(actions, "StateM").name("|-⟩");
+    setStateFolder.add(actions, "StateP").name("|+⟩");
+    setStateFolder.add(actions, "StateMi").name("|-i⟩");
+    setStateFolder.add(actions, "StatePi").name("|+i⟩");
+
+    const halfTurnsFolder = gui.addFolder("Half Turn Gates");
+    halfTurnsFolder.add(actions, "XGate").name("X");
+    halfTurnsFolder.add(actions, "YGate").name("Y");
+    halfTurnsFolder.add(actions, "ZGate").name("Z");
+    halfTurnsFolder.add(actions, "HGate").name("H");
+
+    const quarterTurnsFolder = gui.addFolder("Quarter Turn Gates");
+    quarterTurnsFolder.add(actions, "SGate").name("S");
+    quarterTurnsFolder.add(actions, "SNegGate").name("S^-1");
+    quarterTurnsFolder.add(actions, "YHalfGate").name("Y^½");
+    quarterTurnsFolder.add(actions, "YNegHalfGate").name("Y^-½");
+    quarterTurnsFolder.add(actions, "XHalfGate").name("X^½");
+    quarterTurnsFolder.add(actions, "XNegHalfGate").name("X^-½");
+
+    const eighthTurnsFolder = gui.addFolder("Eighth Turn Gates");
+    eighthTurnsFolder.add(actions, "TGate").name("T");
+    eighthTurnsFolder.add(actions, "TNegGate").name("T^-1");
+    eighthTurnsFolder.add(actions, "YQuarterGate").name("Y^¼");
+    eighthTurnsFolder.add(actions, "YNegQuarterGate").name("Y^-¼");
+    eighthTurnsFolder.add(actions, "XQuarterGate").name("X^¼");
+    eighthTurnsFolder.add(actions, "XNegQuarterGate").name("X^-¼");
+
+    halfTurnsFolder.open();
+    quarterTurnsFolder.open();
+    eighthTurnsFolder.open();
+}
+
+function getAbsoluteHeight(el) {
+    el = (typeof el === "string") ? document.querySelector(el) : el;
+
+    const styles = window.getComputedStyle(el);
+    const margin = parseFloat(styles['marginTop']) + parseFloat(styles['marginBottom']);
+
+    return Math.ceil(el.offsetHeight + margin);
+}
