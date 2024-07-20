@@ -1,4 +1,24 @@
 {
+  "name": "interactive-blochsphere",
+  "description": "An interactive [bloch sphere](https://en.wikipedia.org/wiki/Bloch_sphere) implemented with [Three.js](https://threejs.org/).",
+  "version": "0.1.0",
+  "main": "InteractiveBlochSphere.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Teddy55Codes/BlochSphere.git"
+  },
+  "keywords": [
+    "blochsphere"
+  ],
+  "author": "Teddy55Codes",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Teddy55Codes/BlochSphere/issues"
+  },
+  "homepage": "https://github.com/Teddy55Codes/BlochSphere#readme",
   "dependencies": {
     "@seregpie/three.text-sprite": "^3.2.0",
     "three": "^0.165.0"
