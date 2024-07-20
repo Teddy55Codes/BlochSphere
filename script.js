@@ -1,3 +1,3 @@
 import {InteractiveBlochSphere} from "./InteractiveBlochSphere";
 
-new InteractiveBlochSphere();
+new InteractiveBlochSphere(document.getElementById("blochsphere"));

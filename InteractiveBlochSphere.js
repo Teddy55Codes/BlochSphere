@@ -3,7 +3,7 @@ import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import TextSprite from '@seregpie/three.text-sprite';
 import GUI from 'lil-gui';
 import * as Qubit from "./Qubit";
-import * as Gates from "./Gates"
+import * as Gates from "./Gates";
 
 export class InteractiveBlochSphere {
     qubit = new Qubit.Qubit();
@@ -11,7 +11,7 @@ export class InteractiveBlochSphere {
     qubitAnchor;
     qubitArrow;
     
-    constructor() {
+    constructor(parentElement) {
         const renderer = new THREE.WebGLRenderer();
         const scene = new THREE.Scene();
 
@@ -231,19 +231,26 @@ export class InteractiveBlochSphere {
             renderer.setSize(contentContainer.clientWidth, height);
         });
         
-        const parent = document.getElementById("blochsphere");
-        parent.style.display = "flex";
-        parent.style.alignItems = "horizontal"
+        const group = document.createElement("div");
+        group.id = "interactive-blochsphere-root";
+        group.style.height = "100%";
+        group.style.width = "100%";
+        group.style.display = "flex";
+        group.style.alignItems = "horizontal";
 
         const controlsContainer = document.createElement("div");
+        controlsContainer.id = "interactive-blochsphere-controls";
         controlsContainer.style.width = "150px";
 
         const contentContainer = document.createElement("div");
+        contentContainer.id = "interactive-blochsphere-content";
         contentContainer.style.width = "100%";
 
         // Info text that shows the current value of the qubit
         this.infoText = document.createElement("p");
+        this.infoText.id = "interactive-blochsphere-info";
         this.infoText.style.marginLeft = "10px";
+        this.infoText.style.fontSize = "16pt";
 
         // lil-gui
         const gui = new GUI({
@@ -251,9 +258,10 @@ export class InteractiveBlochSphere {
             width: 150});
 
         this.buildGUI(gui);
-
-        parent.appendChild(contentContainer);
-        parent.appendChild(controlsContainer);
+        
+        parentElement.appendChild(group);
+        group.appendChild(contentContainer);
+        group.appendChild(controlsContainer);
         contentContainer.appendChild(this.infoText);
         contentContainer.appendChild(renderer.domElement);
         renderer.setSize(contentContainer.clientWidth, contentContainer.clientHeight - this.getAbsoluteHeight(this.infoText));
