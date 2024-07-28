@@ -1,7 +1,7 @@
 {
   "name": "interactive-blochsphere",
   "description": "An interactive [bloch sphere](https://en.wikipedia.org/wiki/Bloch_sphere) implemented with [Three.js](https://threejs.org/).",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "InteractiveBlochSphere.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
