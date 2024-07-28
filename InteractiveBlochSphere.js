@@ -259,10 +259,10 @@ export class InteractiveBlochSphere {
 
         this.buildGUI(gui);
         
+        parentElement.appendChild(this.infoText);
         parentElement.appendChild(group);
         group.appendChild(contentContainer);
         group.appendChild(controlsContainer);
-        contentContainer.appendChild(this.infoText);
         contentContainer.appendChild(renderer.domElement);
         renderer.setSize(contentContainer.clientWidth, contentContainer.clientHeight - this.getAbsoluteHeight(this.infoText));
 
