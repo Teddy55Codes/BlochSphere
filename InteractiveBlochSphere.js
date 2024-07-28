@@ -247,7 +247,7 @@ export class InteractiveBlochSphere {
         contentContainer.style.width = "100%";
 
         // Info text that shows the current value of the qubit
-        this.infoText = document.createElement("p");
+        this.infoText = document.createElement("pre");
         this.infoText.id = "interactive-blochsphere-info";
         this.infoText.style.marginLeft = "10px";
         this.infoText.style.fontSize = "16pt";
@@ -329,12 +329,8 @@ export class InteractiveBlochSphere {
     }
 
     refreshTextInfo(polar, azimuthal, realAlpha, imagAlpha, realBeta, imagBeta) {
-        this.infoText.innerText =
-            `φ: ${Math.round((azimuthal/Math.PI)*180)}°
-        θ: ${Math.round((polar/Math.PI)*180)}°
-        
-        Alpha: ${realAlpha.toFixed(4)} ${imagAlpha < 0 ? '' : '+'}${imagAlpha.toFixed(4)}i 
-        Beta: ${realBeta.toFixed(4)} ${imagBeta < 0 ? '' : '+'}${imagBeta.toFixed(4)}i`;
+        this.infoText.innerText = `Alpha: ${realAlpha.toFixed(4)} ${imagAlpha < 0 ? '' : '+'}${imagAlpha.toFixed(4)}i${realAlpha < 0 ? '   ' : '    '}φ: ${Math.round((azimuthal/Math.PI)*180)}°
+Beta:  ${realBeta.toFixed(4)} ${imagBeta < 0 ? '' : '+'}${imagBeta.toFixed(4)}i${realBeta < 0 ? '   ' : '    '}θ: ${Math.round((polar/Math.PI)*180)}°`;
     }
 
     buildGUI(gui) {
